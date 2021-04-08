@@ -1,27 +1,32 @@
 package com.nielsonferreira.dcfc.model;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Entity
+@DiscriminatorValue("JURIDICA")
+@JsonTypeName("PessoaJuridica")
 public class PessoaJuridica extends Cliente{
 
-	private String cnpj;
+	@NotNull
 	private String razaoSocial;
+	
 	private String nomeFantasia;
 	
-	public String getCnpj() {
-		return cnpj;
-	}
-	public void setCnpj(String cnpj) {
-		this.cnpj = cnpj;
-	}
-	public String getRazaoSocial() {
-		return razaoSocial;
-	}
-	public void setRazaoSocial(String razaoSocial) {
-		this.razaoSocial = razaoSocial;
-	}
-	public String getNomeFantasia() {
-		return nomeFantasia;
-	}
-	public void setNomeFantasia(String nomeFantasia) {
-		this.nomeFantasia = nomeFantasia;
-	}
+	@NotNull
+	@NotEmpty
+	private String cnpj;
+	
+	@Transient
+	private String tipo = "Pessoa Jurídica";
 }
