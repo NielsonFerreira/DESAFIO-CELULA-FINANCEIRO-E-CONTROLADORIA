@@ -1,12 +1,10 @@
-package com.nielsonferreira.dcfc.model;
+package com.nielsonferreira.dcfc.models;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +13,6 @@ import lombok.Setter;
 @Setter
 @Entity
 @DiscriminatorValue("JURIDICA")
-@JsonTypeName("PessoaJuridica")
 public class PessoaJuridica extends Cliente{
 
 	@NotNull

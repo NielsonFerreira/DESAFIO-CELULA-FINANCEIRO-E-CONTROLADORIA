@@ -1,4 +1,4 @@
-package com.nielsonferreira.dcfc.model;
+package com.nielsonferreira.dcfc.models;
 
 public enum tipoMovimentacao {
 

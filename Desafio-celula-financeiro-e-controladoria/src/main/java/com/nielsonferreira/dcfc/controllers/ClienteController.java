@@ -1,4 +1,4 @@
-package com.nielsonferreira.dcfc.resource;
+package com.nielsonferreira.dcfc.controllers;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,17 +22,25 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nielsonferreira.dcfc.event.RecursoCriadoEvent;
-import com.nielsonferreira.dcfc.model.Cliente;
-import com.nielsonferreira.dcfc.model.PessoaFisica;
-import com.nielsonferreira.dcfc.model.PessoaJuridica;
+import com.nielsonferreira.dcfc.models.Cliente;
+import com.nielsonferreira.dcfc.models.PessoaFisica;
+import com.nielsonferreira.dcfc.models.PessoaJuridica;
 import com.nielsonferreira.dcfc.repository.ClienteRepository;
+import com.nielsonferreira.dcfc.repository.PessoaFisicaRepository;
+import com.nielsonferreira.dcfc.repository.PessoaJuridicaRepository;
 
 @RestController
 @RequestMapping("/clientes")
-public class ClienteResource {
+public class ClienteController {
 
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private PessoaFisicaRepository pessoaFisicaRepository;
+	
+	@Autowired
+	private PessoaJuridicaRepository pessoaJuridicaRepository;
 	
 	@Autowired
 	private ApplicationEventPublisher publisher;
@@ -43,18 +51,16 @@ public class ClienteResource {
 	}
 	
 	@PostMapping
-	@RequestMapping("/pessoafisica")
-	public ResponseEntity<Cliente> criarPessoaFisica(@Valid @RequestBody PessoaFisica cliente, HttpServletResponse response){
-		
+	@RequestMapping("/pessoa-fisica")
+	public ResponseEntity<Cliente> salvarPessoaFisica(@Valid @RequestBody PessoaFisica cliente, HttpServletResponse response){
 		Cliente clienteSalvo = clienteRepository.save(cliente);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, clienteSalvo.getId()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
 	}
 	
 	@PostMapping
-	@RequestMapping("/pessoajuridica")
-	public ResponseEntity<Cliente> criarPessoaJuridica(@Valid @RequestBody PessoaJuridica cliente, HttpServletResponse response){
-		
+	@RequestMapping("/pessoa-juridica")
+	public ResponseEntity<Cliente> salvarPessoaJuridica(@Valid @RequestBody PessoaJuridica cliente, HttpServletResponse response){
 		Cliente clienteSalvo = clienteRepository.save(cliente);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, clienteSalvo.getId()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
@@ -63,16 +69,24 @@ public class ClienteResource {
 	@GetMapping("/{id}")
 	public ResponseEntity<Optional<Cliente>> buscarClientePeloId(@PathVariable Long id){
 		Optional<Cliente> cliente = clienteRepository.findById(id);
-		
 		return cliente != null ? ResponseEntity.ok(cliente) : ResponseEntity.notFound().build();
 	}
 	
-	@PutMapping("pessoafisica/{id}")
-	public ResponseEntity<Cliente> atualizar(@PathVariable Long id, @Valid @RequestBody PessoaFisica cliente){
-		Cliente clienteSalvo = clienteRepository.getOne(id);
+	// Atualizar Pessoa Física
+	@PutMapping("pessoa-fisica/{id}")
+	public ResponseEntity<PessoaFisica> atualizarPF(@PathVariable Long id, @Valid @RequestBody PessoaFisica cliente){
+		PessoaFisica clienteSalvo = pessoaFisicaRepository.getOne(id);
 		BeanUtils.copyProperties(cliente, clienteSalvo, "id");
-		clienteRepository.save(clienteSalvo);
-		
+		pessoaFisicaRepository.save(clienteSalvo);
+		return ResponseEntity.status(HttpStatus.OK).body(clienteSalvo);
+	}
+	
+	// Atualizar Pessoa Jurídica
+	@PutMapping("pessoa-juridica/{id}")
+	public ResponseEntity<PessoaJuridica> atualizarPJ (@PathVariable Long id, @Valid @RequestBody PessoaJuridica cliente){
+		PessoaJuridica clienteSalvo = pessoaJuridicaRepository.getOne(id);
+		BeanUtils.copyProperties(cliente, clienteSalvo, "id");
+		pessoaJuridicaRepository.save(clienteSalvo);
 		return ResponseEntity.status(HttpStatus.OK).body(clienteSalvo);
 	}
 	

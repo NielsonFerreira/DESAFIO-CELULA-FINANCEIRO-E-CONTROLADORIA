@@ -1,4 +1,4 @@
-package com.nielsonferreira.dcfc.model;
+package com.nielsonferreira.dcfc.models;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,28 +11,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Data
 @Entity
+@Table(name = "cliente")
 @DiscriminatorColumn(name = "Tipo_Pessoa", discriminatorType = DiscriminatorType.STRING)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NONE, include = JsonTypeInfo.As.PROPERTY)
-@JsonSubTypes({
-    @JsonSubTypes.Type(value = PessoaFisica.class),
-    @JsonSubTypes.Type(value = PessoaJuridica.class)})
+@SequenceGenerator(name = "SEQ_CLIENTE", sequenceName = "SEQ_CLIENTE", initialValue = 1, allocationSize = 1 )
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public abstract class Cliente {
 
-	@EqualsAndHashCode.Include
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CLIENTE")
 	private Long id;
 	
 	@Embedded
