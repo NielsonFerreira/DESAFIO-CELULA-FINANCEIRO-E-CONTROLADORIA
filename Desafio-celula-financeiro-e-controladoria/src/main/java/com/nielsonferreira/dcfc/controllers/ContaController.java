@@ -5,9 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,51 +18,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nielsonferreira.dcfc.event.RecursoCriadoEvent;
 import com.nielsonferreira.dcfc.models.Conta;
-import com.nielsonferreira.dcfc.repository.ContaRepository;
+import com.nielsonferreira.dcfc.service.ContaService;
 
 @RestController
 @RequestMapping("/contas")
 public class ContaController {
 	
 	@Autowired
-	private ContaRepository contaRepository;
-	
-	@Autowired
-	private ApplicationEventPublisher publisher;
+	private ContaService contaService;
 	
 	@GetMapping
 	public List<Conta> ListarContas(){
-		return contaRepository.findAll();
+		return contaService.ListarContas();
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Conta> buscarContaPeloId(@PathVariable Long id){
-		Conta conta = contaRepository.getOne(id);
-		return conta != null ? ResponseEntity.ok(conta) : ResponseEntity.notFound().build();
+	public ResponseEntity<Conta> buscarContaPeloId(@PathVariable Long numero){
+		return contaService.buscarContaPeloId(numero);
 	}
 	
 	@PostMapping
 	public ResponseEntity<Conta> salvarConta(@Valid @RequestBody Conta conta, HttpServletResponse response){
-		Conta contaSalva = contaRepository.save(conta);
-		publisher.publishEvent(new RecursoCriadoEvent(this, response, conta.getId()));
-		return ResponseEntity.status(HttpStatus.CREATED).body(contaSalva);
-		
+		return contaService.salvarConta(conta, response);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Conta> atualizarConta(@PathVariable Long id, @Valid @RequestBody Conta conta){
-		Conta contaSalva = contaRepository.getOne(id);
-		BeanUtils.copyProperties(conta, contaSalva, "id");
-		contaRepository.save(contaSalva);
-		return ResponseEntity.status(HttpStatus.OK).body(contaSalva);
+	public ResponseEntity<Conta> atualizarConta(@PathVariable Long numero, @Valid @RequestBody Conta conta){
+		return contaService.atualizarConta(numero, conta);
 	}
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void removerConta(@PathVariable Long id) {
-		contaRepository.deleteById(id);
+	public void removerConta(@PathVariable Long numero) {
+		contaService.removerConta(numero);
 	}
 
 }

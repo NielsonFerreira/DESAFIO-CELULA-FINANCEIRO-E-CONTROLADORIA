@@ -1,16 +1,23 @@
 package com.nielsonferreira.dcfc.models;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
 
@@ -18,19 +25,29 @@ import lombok.Data;
 @Entity
 @Table(name = "conta")
 @SequenceGenerator(name = "SEQ_CONTA", sequenceName = "SEQ_CONTA", initialValue = 1, allocationSize = 1 )
+@JsonInclude(Include.NON_NULL)
 public class Conta {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CONTA")
-	private Long id;
+	private Long numero;
 	
 	@ManyToOne
-	@JoinColumn(name = "ID_CLIENTE", foreignKey = @ForeignKey(name = "FK_CLIENTE_CONTA"))
-	private Cliente cliente;
+	@JoinColumn(name = "ID_CLIENTE_PF")
+	private PessoaFisica clientePF;
 	
-	private String numero;
+	@ManyToOne
+	@JoinColumn(name = "ID_CLIENTE_PJ")
+	private PessoaJuridica clientePJ;
 	
-	@Enumerated(EnumType.STRING)
-	private tipoMovimentacao tipo;
+	private double saldo;
 	
+	@OneToMany(mappedBy = "conta")
+	@JsonManagedReference
+	private List<Movimentacao> movimentacao;
+	
+	@Column(name = "Data_Cadastro")
+	@JsonFormat(pattern = "dd-MM-yyyy")
+	private LocalDate dataCadastro = LocalDate.now();
+
 }

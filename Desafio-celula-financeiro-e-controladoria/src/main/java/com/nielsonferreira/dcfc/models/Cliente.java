@@ -1,8 +1,9 @@
 package com.nielsonferreira.dcfc.models;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Embedded;
@@ -14,7 +15,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.Data;
 
@@ -24,6 +28,7 @@ import lombok.Data;
 @DiscriminatorColumn(name = "Tipo_Pessoa", discriminatorType = DiscriminatorType.STRING)
 @SequenceGenerator(name = "SEQ_CLIENTE", sequenceName = "SEQ_CLIENTE", initialValue = 1, allocationSize = 1 )
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonInclude(Include.NON_NULL)
 public abstract class Cliente {
 
 	@Id
@@ -33,9 +38,16 @@ public abstract class Cliente {
 	@Embedded
 	private Endereco endereco;
 	
-	@OneToMany
-	private List<Conta> contas = new ArrayList<>();
-	
 	private String telefone;
+	
+    @OneToMany(mappedBy = "clientePF")
+    private List<Conta> contasPF;
+    
+    @OneToMany(mappedBy = "clientePJ")
+    private List<Conta> contasPJ;
+	
+	@Column(name = "Data_Cadastro")
+	@JsonFormat(pattern = "dd-MM-yyyy")
+	private LocalDate dataCadastro = LocalDate.now();
 	
 }
