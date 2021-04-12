@@ -34,6 +34,8 @@ public class ClienteRepositoryImpl implements ClienteRepositoryQuery{
 		criteria.where(predicates);
 		
 		TypedQuery<Cliente> query = manager.createQuery(criteria);
+		
+		System.out.println(query.getResultList().toArray());
 		return query.getResultList();
 	}
 
