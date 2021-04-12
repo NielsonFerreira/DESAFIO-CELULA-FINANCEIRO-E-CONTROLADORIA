@@ -18,7 +18,7 @@ As seguintes ferramentas foram usadas na construção do projeto:
 - <a href="https://www.oracle.com/index.html">Oracle Database 11g Express Edition</a>
 - <a href="https://junit.org/junit5/">Junit</a>
 - <a href="https://commons.apache.org/proper/commons-lang/">Apache Commons Lang</a>
-- <a href="https://junit.org/junit5/">Postman</a>
+- <a href="https://www.postman.com">Postman</a>
 - <a href="https://www.google.com/intl/pt-BR/chrome/">Google Chrome</a>
 
 
