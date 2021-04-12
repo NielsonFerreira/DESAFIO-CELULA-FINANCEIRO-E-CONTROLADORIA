@@ -26,9 +26,9 @@ import lombok.Data;
 @Entity
 @Table(name = "cliente")
 @DiscriminatorColumn(name = "Tipo_Pessoa", discriminatorType = DiscriminatorType.STRING)
-@SequenceGenerator(name = "SEQ_CLIENTE", sequenceName = "SEQ_CLIENTE", initialValue = 1, allocationSize = 1 )
+@SequenceGenerator(name = "SEQ_CLIENTE", sequenceName = "SEQ_CLIENTE", initialValue = 11, allocationSize = 1 )
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
-@JsonInclude(Include.NON_NULL)
+@JsonInclude(Include.NON_EMPTY)
 public abstract class Cliente {
 
 	@Id

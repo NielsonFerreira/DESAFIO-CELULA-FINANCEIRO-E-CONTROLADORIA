@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nielsonferreira.dcfc.models.Cliente;
+import com.nielsonferreira.dcfc.repository.filter.ClienteFilter;
 import com.nielsonferreira.dcfc.service.ClienteService;
 
 @RestController
@@ -24,8 +25,8 @@ public class ClienteController {
 	private ClienteService clienteService;
 	
 	@GetMapping
-	public List<Cliente> listarTodos(){
-		return clienteService.listarTodos();
+	public List<Cliente> pesquisar(ClienteFilter clienteFilter){
+		return clienteService.pesquisar(clienteFilter);
 	}
 
 	@GetMapping("/{id}")

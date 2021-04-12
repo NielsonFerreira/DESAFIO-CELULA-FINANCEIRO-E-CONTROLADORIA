@@ -14,7 +14,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -24,8 +26,9 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "conta")
-@SequenceGenerator(name = "SEQ_CONTA", sequenceName = "SEQ_CONTA", initialValue = 1, allocationSize = 1 )
-@JsonInclude(Include.NON_NULL)
+@SequenceGenerator(name = "SEQ_CONTA", sequenceName = "SEQ_CONTA", initialValue = 11, allocationSize = 1 )
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonInclude(Include.NON_EMPTY)
 public class Conta {
 
 	@Id
@@ -34,10 +37,12 @@ public class Conta {
 	
 	@ManyToOne
 	@JoinColumn(name = "ID_CLIENTE_PF")
+	@JsonBackReference(value = "conta-clientePF")
 	private PessoaFisica clientePF;
 	
 	@ManyToOne
 	@JoinColumn(name = "ID_CLIENTE_PJ")
+	@JsonBackReference(value = "conta-clientePJ")
 	private PessoaJuridica clientePJ;
 	
 	private double saldo;

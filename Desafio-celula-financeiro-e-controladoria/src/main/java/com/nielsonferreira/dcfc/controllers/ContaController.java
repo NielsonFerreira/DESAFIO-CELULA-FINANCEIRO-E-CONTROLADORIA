@@ -33,9 +33,9 @@ public class ContaController {
 		return contaService.ListarContas();
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<Conta> buscarContaPeloId(@PathVariable Long numero){
-		return contaService.buscarContaPeloId(numero);
+	@GetMapping("/{numero}")
+	public ResponseEntity<Conta> buscarContaPeloNumero(@PathVariable Long numero){
+		return contaService.buscarContaPeloNumero(numero);
 	}
 	
 	@PostMapping
@@ -43,12 +43,12 @@ public class ContaController {
 		return contaService.salvarConta(conta, response);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("/{numero}")
 	public ResponseEntity<Conta> atualizarConta(@PathVariable Long numero, @Valid @RequestBody Conta conta){
 		return contaService.atualizarConta(numero, conta);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{numero}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void removerConta(@PathVariable Long numero) {
 		contaService.removerConta(numero);

@@ -31,7 +31,7 @@ public class ContaService {
 		return contaRepository.findAll();
 	}
 
-	public ResponseEntity<Conta> buscarContaPeloId(@PathVariable Long numero){
+	public ResponseEntity<Conta> buscarContaPeloNumero(@PathVariable Long numero){
 		Conta conta = contaRepository.getOne(numero);
 		return conta != null ? ResponseEntity.ok(conta) : ResponseEntity.notFound().build();
 	}

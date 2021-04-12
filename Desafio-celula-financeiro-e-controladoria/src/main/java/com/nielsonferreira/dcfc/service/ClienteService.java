@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.nielsonferreira.dcfc.models.Cliente;
 import com.nielsonferreira.dcfc.repository.ClienteRepository;
+import com.nielsonferreira.dcfc.repository.filter.ClienteFilter;
 
 @Service
 public class ClienteService {
@@ -17,8 +18,8 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository clienteRepository;
 
-	public List<Cliente> listarTodos(){
-		return clienteRepository.findAll();
+	public List<Cliente> pesquisar(ClienteFilter clienteFilter){
+		return clienteRepository.filtrar(clienteFilter);
 	}
 
 	public ResponseEntity<Optional<Cliente>> buscarClientePeloId(@PathVariable Long id){
